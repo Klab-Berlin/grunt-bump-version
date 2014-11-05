@@ -1,0 +1,41 @@
+{
+  "name": "grunt-bump-version",
+  "description": "Bump version numbers for the specified files.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Klab-Berlin/grunt-bump-version",
+  "author": {
+    "name": "Frederik Rudeck",
+    "email": "frederik.rudeck@googlemail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Klab-Berlin/grunt-bump-version.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Klab-Berlin/grunt-bump-version/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/Klab-Berlin/grunt-bump-version/blob/master/LICENSE-MIT"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.9.2",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt": "~0.4.5"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.5"
+  },
+  "keywords": [
+    "gruntplugin"
+  ]
+}
