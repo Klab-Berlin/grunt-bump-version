@@ -8,42 +8,59 @@
 
 'use strict';
 
+
+var path = require('path');
+var semver = require('semver');
+var util = require('util');
+
+
 module.exports = function(grunt) {
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
+  grunt.registerTask('bump_version', 'Bump version numbers for the specified files.', function(versionNumber) {
+    if (typeof versionNumber === 'undefined' || semver.valid(versionNumber) === null) {
+      grunt.log.error('You have to specify a semantic version number, e.g. grunt bump_version:0.0.0');
+      return false;
+    }
 
-  grunt.registerMultiTask('bump_version', 'Bump version numbers for the specified files.', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      punctuation: '.',
-      separator: ', '
+      js: {
+        regex: /version: '[0-9\.]*'/g,
+        substr: "version: '%s'"
+      },
+      json: {
+        regex: /"version": "[0-9\.]*"/g,
+        substr: '"version": "%s"'
+      }
     });
 
-    // Iterate over all specified file groups.
-    this.files.forEach(function(f) {
-      // Concat specified files.
-      var src = f.src.filter(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        } else {
-          return true;
-        }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+    // Get task specific config
+    var taskConfig = grunt.config('bump_version');
+    if (typeof taskConfig.files === 'undefined') {
+      grunt.log.error('You have to specify files in your task configuration');
+      return false;
+    }
 
-      // Handle options.
-      src += options.punctuation;
+    var files = taskConfig.files;
+    files.filter(function(filepath) {
+      if (!grunt.file.exists(filepath)) {
+        grunt.log.warn('File "' + filepath + '" not found.');
+        return false;
+      } else {
+        return true;
+      }
+    }).forEach(function(filepath) {
+      try {
+        var type = path.extname(filepath).replace('.', '');
+        var file = grunt.file.read(filepath);
+        var output = file.replace(options[type].regex, util.format(options[type].substr, versionNumber));
 
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
-
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
+        grunt.file.write(filepath, output);
+        grunt.log.writeln('Modified version number (' + versionNumber + ') for ' + filepath);
+      } catch (error) {
+        grunt.log.error('Bump version failed - ' + error);
+        return false;
+      }
     });
   });
 

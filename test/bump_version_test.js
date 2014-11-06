@@ -27,22 +27,18 @@ exports.bump_version = {
     // setup here if necessary
     done();
   },
-  default_options: function(test) {
-    test.expect(1);
-
-    var actual = grunt.file.read('tmp/default_options');
-    var expected = grunt.file.read('test/expected/default_options');
-    test.equal(actual, expected, 'should describe what the default behavior is.');
-
+  js: function(test) {
+    var actual = grunt.file.read('tmp/config.js');
+    var expected = grunt.file.read('test/expected/config.js');
+    test.equal(actual, expected, 'should change the version number for js files to "0.0.1".');
+    
     test.done();
   },
-  custom_options: function(test) {
-    test.expect(1);
-
-    var actual = grunt.file.read('tmp/custom_options');
-    var expected = grunt.file.read('test/expected/custom_options');
-    test.equal(actual, expected, 'should describe what the custom option(s) behavior is.');
-
+  json: function(test) {
+    var actual = grunt.file.read('tmp/package.json');
+    var expected = grunt.file.read('test/expected/package.json');
+    test.equal(actual, expected, 'should change the version number for json files to "0.0.1".');
+    
     test.done();
-  },
+  }
 };

@@ -16,11 +16,8 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 ```js
 grunt.loadNpmTasks('grunt-bump-version');
 ```
-
-## The "bump_version" task
-
 ### Overview
-In your project's Gruntfile, add a section named `bump_version` to the data object passed into `grunt.initConfig()`.
+In your project's Gruntfile, add a section named `bump_version` to the data object passed into `grunt.initConfig()`. This is a simple task, and does not conform to multi task options & files input types! All available configuration styles are described below.
 
 ```js
 grunt.initConfig({
@@ -28,62 +25,48 @@ grunt.initConfig({
     options: {
       // Task-specific options go here.
     },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
+    files: [
+      // Target-specific files go here.
+    ],
   },
 });
 ```
 
-### Options
-
-#### options.separator
-Type: `String`
-Default value: `',  '`
-
-A string value that is used to do something with whatever.
-
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
-
-A string value that is used to do something else with whatever else.
+And now you can call it from CLI like this:
+```shell
+grunt bump_version:[version number]
+```
 
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+In this example the version number in the specfied files (depending on the file extension) are modified in place. With the default options the version number in js and json files are modified.
 
 ```js
 grunt.initConfig({
   bump_version: {
     options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+    files: ['path/to/file'],
   },
 });
 ```
 
 #### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+In this example, custom options are used to change the regex match with the specified sub string in `.txt` files
 
 ```js
 grunt.initConfig({
   bump_version: {
     options: {
-      separator: ': ',
-      punctuation: ' !!!',
+      txt: {
+        regex: /version: '[0-9\.]*'/g,
+        substr: "version: '%s'"
+      }
     },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+    files: ['path/to/file'],
   },
 });
 ```
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
-
-## Release History
-_(Nothing yet)_
