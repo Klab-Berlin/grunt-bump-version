@@ -25,12 +25,12 @@ module.exports = function(grunt) {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       js: {
-        regex: /version: '[0-9\.]*'/g,
-        substr: "version: '%s'"
+        regex: /(?:@version|version:)+ '?([0-9\.]*)'?/g,
+        substr: '%s'
       },
       json: {
-        regex: /"version": "[0-9\.]*"/g,
-        substr: '"version": "%s"'
+        regex: /"version": "([0-9\.]*)"/g,
+        substr: '%s'
       }
     });
 
@@ -53,7 +53,10 @@ module.exports = function(grunt) {
       try {
         var type = path.extname(filepath).replace('.', '');
         var file = grunt.file.read(filepath);
-        var output = file.replace(options[type].regex, util.format(options[type].substr, versionNumber));
+        
+        var output = file.replace(options[type].regex, function(match, p1) {
+          return match.replace(p1, util.format(options[type].substr, versionNumber));
+        });
 
         grunt.file.write(filepath, output);
         grunt.log.writeln('Modified version number (' + versionNumber + ') for ' + filepath);

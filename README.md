@@ -52,15 +52,15 @@ grunt.initConfig({
 ```
 
 #### Custom Options
-In this example, custom options are used to change the regex match with the specified sub string in `.txt` files
+In this example, custom options are used to change the regex match with the specified sub string in `.txt` files. The regular expression always needs a capturing parentheses to change the version number.
 
 ```js
 grunt.initConfig({
   bump_version: {
     options: {
       txt: {
-        regex: /version: '[0-9\.]*'/g,
-        substr: "version: '%s'"
+        regex: /version: '([0-9\.]*)'/g,
+        substr: '%s'
       }
     },
     files: ['path/to/file'],
